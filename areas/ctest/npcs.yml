@@ -1,0 +1,32 @@
+- id: 'rat'
+  name: a rat
+  keywords: ['rat', 'animal']
+  description: "It's a dirty rat!"
+  roomDesc: 'A rat is here. Disgusting!'
+  type: MONSTER 
+  attributes:
+    health: 20
+    int: 1
+    ac: 9
+    thac0: 20
+  metadata:
+    xp: 7
+    hitDice: "1"
+    alignment: "true neutral"
+    size: "T"
+    environment: "any"
+    activityCycle: "any"
+    treasure: "Nil"
+    numberAppearing: "1 (1-12)"
+    morale: '8-10'
+    notes: 'special attack: rear claw rake'
+    autoAttacks:
+    - verb: 'bite'
+      damageDiceSum: '1d2'
+      thac0Sum: 20
+      magicalModifier: 0
+      attacksPerRound: 1
+  behaviors:
+    combat: true
+    ranvior-wander:
+     interval: 50

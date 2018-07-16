@@ -1,110 +1,8 @@
-const Combat = require('./lib/Combat');
-const CombatErrors = require('./lib/CombatErrors');
-const LevelUtil = require('../ranvier-lib/lib/LevelUtil');
-const WebsocketStream = require('../ranvier-websocket/lib/WebsocketStream');
+const Combat = require('./lib/Combat')
+const CombatErrors = require('./lib/CombatErrors')
+// const LevelUtil = require('../dndiku-classes/lib/LevelUtil')
+// const WebsocketStream = require('../ranvier-websocket/lib/WebsocketStream')
 
-
-const getDamageAdjective = (targetInitialHp, damageDealt) => {
-  let adjective = ''
-  const amountAdjectives = {
-    0.01: 'no apparent',  // < 1%
-    0.05: 'little',       // < 5%
-    0.15: 'some',         // < 15%
-    0.25: 'considerable', // < 25%
-    0.5: 'great',        // < 50%
-    // <- DONT PUT A 1 AS KEY HERE! IT BREAKS ITERATION ORDER!
-  }
-  const dealtDamageRatio = damageDealt / targetInitialHp
-  for (const r in amountAdjectives) {
-    var ratio = parseFloat(r)
-    adjective = amountAdjectives[r]
-    if( dealtDamageRatio < ratio ) {
-      break
-    }
-  }
-  return adjective  
-}
-
-const conjugateVerb = (verb) => {
-  let table = {
-    'slash': 'slashes',
-    'bite': 'bites',
-    'claw': 'claws',
-    'punch': 'punches',
-    'peck': 'pecks',
-    'hit': 'hits',
-    'club': 'clubs',
-    'stab': 'stabs',
-    'crush': 'crushes',
-  }
-  return table[verb]
-}
-
-const getAttackLine = (attack, attackerName, damage, targetName, viewer) => {
-  let output = ''
-  /*
-  if viewer = 'attacker'
-  You punch at a black and white cat, dealing little damage.
-
-  if viewer = 'target'
-  A black and white cat claws you, causing great damage.
-
-  if viewer = 'other'
-  A black and white cat claws at Geronimo, causing great damage.
-  */
-
-  let ATTACKER = ''
-  let TARGET = ''
-  let VERB = ''
-
-  if( viewer === 'attacker' ) {
-    if (attack.misses) {
-      output = 'ATTACKER try to VERB TARGET, <green>missing</green>.\n'
-    } else {
-      output = 'ATTACKER VERB TARGET, <green><bold>dealing AMOUNT damage</bold></green>.\n'
-    }
-    ATTACKER = 'you'
-    TARGET = targetName
-    VERB = attack.verb
-
-  } else if (viewer === 'target') {
-    if (attack.misses) {
-      output = 'ATTACKER tries to VERB TARGET, <yellow>missing</yellow>.\n'
-      VERB = attack.verb
-    } else {
-      output = 'ATTACKER VERB TARGET, <red>dealing AMOUNT damage</red>.\n'
-      VERB = conjugateVerb(attack.verb)
-    }    
-    ATTACKER = attackerName
-    TARGET = 'you'  
-
-  } else if (viewer === 'other') {
-    if (attack.misses) {
-      output = 'ATTACKER tries to VERB TARGET, missing.\n'
-      VERB = attack.verb
-    } else {
-      output = 'ATTACKER VERB TARGET, dealing AMOUNT damage.\n'
-      VERB = conjugateVerb(attack.verb)
-    }    
-    ATTACKER = attackerName
-    TARGET = targetName
-
-  }
-
-  output = output.replace('ATTACKER', ATTACKER)
-  output = output.replace('TARGET', TARGET)
-  output = output.replace('VERB', VERB)
-
-  if(! attack.misses) {
-    let AMOUNT = getDamageAdjective(damage.targetInitialHp, attack.rolledDamage)
-    output = output.replace('AMOUNT', AMOUNT)
-  }
-
-  // capitalize first letter
-  output = output.slice(0,1).toUpperCase() + output.slice(1, output.length)
-
-  return output
-}
 
 /**
  * Auto combat module
@@ -131,17 +29,6 @@ module.exports = (srcPath) => {
         if (!hadActions) {
           return;
         }
-
-        // const usingWebsockets = this.socket instanceof WebsocketStream;
-        // // don't show the combat prompt to a websockets server
-        // if (!this.hasPrompt('combat') && !usingWebsockets) {
-        //   this.addPrompt('combat', _ => promptBuilder(this));
-        // }
-
-        // B.sayAt(this, '');
-        // if (!usingWebsockets) {
-          // B.prompt(this)
-        // }
       },
 
       /**
@@ -188,9 +75,9 @@ module.exports = (srcPath) => {
           output3+= line
         }
 
-        B.sayAt(this, output1) 
-        B.sayAt(target, output2) 
-        B.sayAtExcept( this.room, output3, 
+        B.sayAt(this, output1) // broadcast attack to attacker
+        B.sayAt(target, output2) // broadcast attack to target
+        B.sayAtExcept( this.room, output3, // broadcast attack to everyone else in room
           [this, target]  
         )
 
@@ -340,6 +227,19 @@ module.exports = (srcPath) => {
         // }
       },
 
+      currency: state => function (currency, amount) {
+        // const friendlyName = currency.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+        // const key = `currencies.${currency}`;
+
+        // if (!this.getMeta('currencies')) {
+        //   this.setMeta('currencies', {});
+        // }
+        // this.setMeta(key, (this.getMeta(key) || 0) + amount);
+        // this.save();
+
+        // B.sayAt(this, `<green>You receive currency: <b><white>[${friendlyName}]</white></b> x${amount}.`);
+      },
+
       /**
        * Player was killed
        * @param {Character} killer
@@ -419,4 +319,110 @@ module.exports = (srcPath) => {
     output = '\n' + output
     return output
   }  
+
+  function getDamageAdjective(targetInitialHp, damageDealt) {
+    let adjective = ''
+    const amountAdjectives = {
+      0.01: 'no apparent',  // < 1%
+      0.05: 'little',       // < 5%
+      0.15: 'some',         // < 15%
+      0.25: 'considerable', // < 25%
+      0.5: 'great',        // < 50%
+      // <- DONT PUT A 1 AS KEY HERE! IT BREAKS ITERATION ORDER!
+    }
+    const dealtDamageRatio = damageDealt / targetInitialHp
+    for (const r in amountAdjectives) {
+      var ratio = parseFloat(r)
+      adjective = amountAdjectives[r]
+      if( dealtDamageRatio < ratio ) {
+        break
+      }
+    }
+    return adjective  
+  }
+
+  /*
+  Try and replace this with a set of grammatical rules 
+  */
+  function conjugateVerb(verb) {
+    let table = {
+      'slash': 'slashes',
+      'bite': 'bites',
+      'claw': 'claws',
+      'punch': 'punches',
+      'peck': 'pecks',
+      'hit': 'hits',
+      'club': 'clubs',
+      'stab': 'stabs',
+      'crush': 'crushes',
+    }
+    return table[verb]
+  }
+
+  function getAttackLine(attack, attackerName, damage, targetName, viewer) {
+    let output = ''
+    /*
+    if viewer = 'attacker'
+    You punch at a black and white cat, dealing little damage.
+
+    if viewer = 'target'
+    A black and white cat claws you, causing great damage.
+
+    if viewer = 'other'
+    A black and white cat claws at Geronimo, causing great damage.
+    */
+
+    let ATTACKER = ''
+    let TARGET = ''
+    let VERB = ''
+
+    if( viewer === 'attacker' ) {
+      if (attack.didMiss) {
+        output = 'ATTACKER try to VERB TARGET, missing.\n'
+      } else {
+        output = 'ATTACKER VERB TARGET, dealing AMOUNT damage.\n'
+      }
+      ATTACKER = 'you'
+      TARGET = targetName
+      VERB = attack.verb
+
+    } else if (viewer === 'target') {
+      if (attack.didMiss) {
+        output = 'ATTACKER tries to VERB TARGET, missing.\n'
+        VERB = attack.verb
+      } else {
+        output = 'ATTACKER VERB TARGET, dealing AMOUNT damage.\n'
+        VERB = conjugateVerb(attack.verb)
+      }    
+      ATTACKER = attackerName
+      TARGET = 'you'  
+
+    } else if (viewer === 'other') {
+      if (attack.didMiss) {
+        output = 'ATTACKER tries to VERB TARGET, missing.\n'
+        VERB = attack.verb
+      } else {
+        output = 'ATTACKER VERB TARGET, dealing AMOUNT damage.\n'
+        VERB = conjugateVerb(attack.verb)
+      }    
+      ATTACKER = attackerName
+      TARGET = targetName
+
+    }
+
+    output = output.replace('ATTACKER', ATTACKER)
+    output = output.replace('TARGET', TARGET)
+    output = output.replace('VERB', VERB)
+
+    if(! attack.didMiss) {
+      let AMOUNT = getDamageAdjective(damage.targetInitialHp, attack.rolledDamage)
+      output = output.replace('AMOUNT', AMOUNT)
+    }
+
+    // capitalize first letter
+    output = output.slice(0,1).toUpperCase() + output.slice(1, output.length)
+
+    return output
+  }
+
 }

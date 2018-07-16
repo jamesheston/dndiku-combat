@@ -1,0 +1,7 @@
+- id: 0-0-0
+  title: "Combat Test Room 0"
+  coordinates: [0, 0, 0]
+  terrain: ""
+  description: ""
+  npcs: ['ctest:rat']
+  items: ['ctest:longsword', 'ctest:platemail', 'ctest:kiteshield']

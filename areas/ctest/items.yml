@@ -1,0 +1,47 @@
+- id: 'longsword'
+  name: "a long sword"
+  description: ""
+  roomDesc: "A longsword is here."    
+  keywords: ["sword", "long", "longsword"]
+  type: WEAPON
+  weight: 4 # lbs
+  metadata:
+    verb: slash
+    slot: "wield"
+    damageDice: "1d8"
+    magicalModifier: 0
+    range: 0
+  behaviors:
+    sellable:
+      value: 15
+      currency: gold
+
+- id: 'platemail'
+  name: "some plate mail armor"
+  description: ""
+  roomDesc: "Some platemail is here."
+  keywords: ["armor", "plate", "mail"]  
+  type: ARMOR
+  weight: 50
+  metadata:
+    slot: "body"
+    ac: 7
+  behaviors:
+    sellable:
+      value: 600
+      currency: gold 
+
+- id: 'kiteshield'
+  name: "a kite shield"
+  description: ""
+  roomDesc: "A kite shield is here."
+  keywords: ["armor", "kite", "shield"]  
+  type: ARMOR
+  weight: 10
+  metadata:
+    slot: "body"
+    ac: 2
+  behaviors:
+    sellable:
+      value: 7
+      currency: gold 

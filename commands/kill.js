@@ -9,12 +9,12 @@ module.exports = (srcPath) => {
   const Logger = require(srcPath + 'Logger');
 
   return {
-    aliases: ['attack', 'hit'],
+    aliases: ['attack', 'slay'],
     command : (state) => (args, player) => {
       args = args.trim();
 
       if (!args.length) {
-        return B.sayAt(player, 'Attack whom?');
+        return B.sayAt(player, 'Kill whom?');
       }
 
       let target = null;
@@ -37,12 +37,12 @@ module.exports = (srcPath) => {
         return B.sayAt(player, "They aren't here.");
       }
 
-      B.sayAt(player, `You approach ${target.name} to attack them...`);
+      B.sayAt(player, `You attack ${target.name}.`);
 
       player.initiateCombat(target);
-      B.sayAtExcept(player.room, `${player.name} approaches to attack ${target.name}...`, [player, target]);
+      B.sayAtExcept(player.room, `${player.name} attacks ${target.name}!`, [player, target]);
       if (!target.isNpc) {
-        B.sayAt(target, `${player.name} approaches to attack you...`);
+        B.sayAt(target, `${player.name} attacks you!`);
       }
     }
   };

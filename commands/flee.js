@@ -8,9 +8,9 @@ module.exports = srcPath => {
   return {
     usage: 'flee [direction]',
     command: state => (direction, player) => {
-      // if (!player.isInCombat()) {
-      //   return say(player, 'You are not in combat.');
-      // }
+      if (!player.isInCombat()) {
+        return say(player, "You jump at the sight of your own shadow.");
+      }
 
       let possibleRooms = {};
       for (const possibleExit of player.room.exits) {
@@ -53,7 +53,7 @@ module.exports = srcPath => {
       const randomRoom = state.RoomManager.getRoom(roomId);
 
       if (!randomRoom) {
-        say(player, "There is nowhere to run!");
+        say(player, "You can't find anywhere to run!");
         return;
       }
 
@@ -63,18 +63,9 @@ module.exports = srcPath => {
         say(player, "In your panic you run into a closed door!");
         return;
       }
- 
-      if( player.isInCombat() ){
-        Broadcast.sayAt(player, "You flee from the battle!");
-        Broadcast.sayAtExcept(player.room, `${player.name} flees from the battle.`, player )
-        player.removeFromCombat();
 
-      } else {
-        Broadcast.sayAt(player, "You panic and flee!");
-        Broadcast.sayAtExcept(player.room, `${player.name} panicks, and runs away!`, player )
-      }
-
-
+      say(player, "You cowardly flee from the battle!");
+      player.removeFromCombat();
       state.CommandManager.get('move').execute(direction, player);
     }
   };
