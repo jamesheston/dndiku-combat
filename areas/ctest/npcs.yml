@@ -5,7 +5,7 @@
   roomDesc: 'A rat is here. Disgusting!'
   type: MONSTER 
   attributes:
-    health: 20
+    health: 1
     int: 1
     ac: 9
     thac0: 20
@@ -22,11 +22,79 @@
     notes: 'special attack: rear claw rake'
     autoAttacks:
     - verb: 'bite'
-      damageDiceSum: '1d2'
-      thac0Sum: 20
+      damageDice: '1d2'
       magicalModifier: 0
       attacksPerRound: 1
   behaviors:
     combat: true
-    ranvior-wander:
-     interval: 50
+    # ranvior-wander:
+    #  interval: 50
+
+- id: 'cat'
+  name: a cat
+  keywords: ['cat', 'animal']
+  description: ""
+  roomDesc: ''
+  type: MONSTER 
+  attributes:
+    health: 5
+    int: 1
+    ac: 6
+    thac0: 20
+  metadata:
+    xp: 7
+    hitDice: "1"
+    alignment: "true neutral"
+    size: "T"
+    environment: "any"
+    activityCycle: "any"
+    treasure: "Nil"
+    numberAppearing: "1 (1-12)"
+    morale: '8-10'
+    notes: 'special attack: rear claw rake'
+    autoAttacks:
+    - verb: 'claw'
+      damageDice: '1d1'
+      magicalModifier: 0
+      attacksPerRound: 2
+    - verb: 'bite'
+      damageDice: '1d1'
+      magicalModifier: 0
+      attacksPerRound: 1
+  behaviors:
+    combat: true
+
+
+- id: 'grizzlybear'
+  name: a grizzly bear
+  keywords: ['bear', 'grizzly', 'animal']
+  description: 'This massive beast is 8 feet long from its snout to the base of its short tail. Its shoulders stand 5 feet off the ground. It must weigh over 700 pounds. Its brownish fur is long and thick, and blonder on its flank and back. Its back has a pronounced hump around the shoulders, which stand higher than the rear of its body. It has long, shiny, slightly curved claws.'
+  roomDesc: 'An enormous bear with grizzled brown fur pads around here.'
+  type: MONSTER 
+  attributes:
+    health: 45
+    int: 1
+    ac: 6
+    thac0: 15
+  metadata:
+    xp: 420
+    hitDice: "5d8+5"
+    alignment: "true neutral"
+    size: "L"
+    environment: "temperate land"
+    activityCycle: "any"
+    treasure: "Nil"
+    numberAppearing: "1 (1-6)"
+    morale: '8-10'
+    notes: 'special attack: hug'
+    autoAttacks:
+    - verb: 'claw'
+      damageDice: '1d6'
+      magicalModifier: 0
+      attacksPerRound: 2
+    - verb: 'bite'
+      damageDice: '1d8'
+      magicalModifier: 0
+      attacksPerRound: 1      
+  behaviors:
+    combat: true

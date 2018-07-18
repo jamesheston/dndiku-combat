@@ -1,7 +1,44 @@
-- id: 0-0-0
-  title: "Combat Test Room 0"
+#nexus
+- id: 0,0,0
+  title: "A Nexus"
   coordinates: [0, 0, 0]
-  terrain: ""
   description: ""
-  npcs: ['ctest:rat']
+  npcs: ['ctest:rat', 'ctest:cat']
   items: ['ctest:longsword', 'ctest:platemail', 'ctest:kiteshield']
+
+#1n
+- id: 0,1,0
+  title: "Arena"
+  coordinates: [0, 1, 0]
+  description: ""
+  npcs: ['ctest:grizzlybear']
+
+#1e
+- id: 1,0,0
+  title: "Arena"
+  coordinates: [1, 0, 0]
+  description: ""
+
+#1s
+- id: 0,-1,0
+  title: "Arena"
+  coordinates: [0, -1, 0]
+  description: ""
+
+#1w
+- id: -1,0,0
+  title: "Arena"
+  coordinates: [-1, 0, 0]
+  description: ""
+
+#1u
+- id: 0,0,1
+  title: "Arena"
+  coordinates: [0, 0, 1]
+  description: ""
+
+#1d
+- id: 0,0,-1
+  title: "Arena"
+  coordinates: [0, 0, -1]
+  description: ""
